@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+
+    <title>Deploy Insights - Relatórios com IA</title>
+    <meta name="description" content="Pare de montar relatórios manuais. Receba análises de tráfego prontas para decisão com IA. Implementação sob medida.">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://deployads.zenclick.com.br/">
+    <meta property="og:title" content="Deploy Insights - Relatórios com IA">
+    <meta property="og:description" content="Sua análise de dados no piloto automático. Decisões baseadas em dados, sem perder tempo com planilhas.">
+    <meta property="og:image" content="https://deployads.zenclick.com.br/og-image.jpg"> <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://deployads.zenclick.com.br/">
+    <meta property="twitter:title" content="Deploy Insights - Relatórios com IA">
+    <meta property="twitter:description" content="Automação de relatórios inteligentes para gestores de tráfego.">
+
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN for immediate rendering -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              brand: {
+                50: '#f0fdf4',
+                100: '#dcfce7',
+                200: '#bbf7d0',
+                300: '#86efac',
+                400: '#4ade80',
+                500: '#22c55e',
+                600: '#16a34a',
+                700: '#15803d',
+                800: '#166534',
+                900: '#14532d',
+                950: '#052e16',
+              },
+            },
+            animation: {
+              'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'float': 'float 6s ease-in-out infinite',
+              'float-delayed': 'float 6s ease-in-out 3s infinite',
+              'fade-in': 'fadeIn 0.3s ease-out',
+              'scale-up': 'scaleUp 0.3s ease-out',
+            },
+            keyframes: {
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-20px)' },
+              },
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              scaleUp: {
+                '0%': { opacity: '0', transform: 'scale(0.95)' },
+                '100%': { opacity: '1', transform: 'scale(1)' },
+              }
+            }
+          },
+        },
+      }
+    </script>
+
+    <style>
+      body {
+        background-color: #020617;
+        color: #f8fafc;
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+      }
+      .glass-card {
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .grid-bg {
+        background-size: 40px 40px;
+        background-image: linear-gradient(to right, rgba(22, 163, 74, 0.05) 1px, transparent 1px),
+                           linear-gradient(to bottom, rgba(22, 163, 74, 0.05) 1px, transparent 1px);
+      }
+    </style>
+
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function getDeviceType() {
+        const ua = navigator.userAgent;
+        if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) return "tablet";
+        if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) return "mobile";
+        return "desktop";
+      }
+      window.dataLayer.push({
+        'event': 'dl_init',
+        'pageTitle': document.title,
+        'pagePath': window.location.pathname,
+        'pageUrl': window.location.href,
+        'pageHostname': window.location.hostname,
+        'visitorType': 'visitor',
+        'deviceType': getDeviceType(),
+        'browserLanguage': navigator.language,
+        'appEnvironment': 'production'
+      });
+      document.addEventListener('click', function(e) {
+        const target = e.target.closest('a, button');
+        if (target) {
+          window.dataLayer.push({
+            'event': 'interaction_click',
+            'elementText': target.innerText || target.textContent || '',
+            'elementClasses': target.className || '',
+            'elementId': target.id || '',
+            'elementUrl': target.href || ''
+          });
+        }
+      });
+    </script>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-T2S89PSZ');</script>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "vite": "https://esm.sh/vite@^7.3.0",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T2S89PSZ"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    
+    <div id="root"></div>
+    
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

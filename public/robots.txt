@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Sitemap (Opcional, se você tiver um)
+# Sitemap: https://deployads.zenclick.com.br/sitemap.xml
