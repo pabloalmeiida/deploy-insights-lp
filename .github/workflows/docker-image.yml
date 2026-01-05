@@ -1,9 +1,9 @@
 name: Build and Push Docker image
 
 on:
-  workflow_dispatch:
-  #push:           # <-- Commented out to disable auto-build
-   #branches: ["main"] # <-- Commented out to disable auto-build
+  #workflow_dispatch:
+  push:           # <-- Commented out to disable auto-build
+   branches: ["main"] # <-- Commented out to disable auto-build
 
 jobs:
   build-and-push:
