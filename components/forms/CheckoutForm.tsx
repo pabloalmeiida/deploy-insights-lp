@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '../ui/Button';
 import { Lock, Loader2 } from 'lucide-react';
 
-export const CheckoutForm: React.FC = () => {
+interface CheckoutFormProps {
+  productUrl: string;
+}
+
+export const CheckoutForm: React.FC<CheckoutFormProps> = ({ productUrl }) => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -85,7 +89,8 @@ export const CheckoutForm: React.FC = () => {
     const webhookPayload = {
       ...formData,
       submitted_at: now.toISOString(), // Ex: "2023-10-27T10:00:00.000Z" (Padrão ISO)
-      timestamp: now.getTime()         // Ex: 1698400800000 (Numérico/Unix)
+      timestamp: now.getTime(),         // Ex: 1698400800000 (Numérico/Unix)
+      product_url: productUrl // Rastrear qual produto foi escolhido no webhook
     };
     // ----------------------------------
 
@@ -115,43 +120,37 @@ export const CheckoutForm: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(webhookPayload) // <--- Alterado aqui
+        body: JSON.stringify(webhookPayload) 
       }).catch(err => console.error("Webhook error (might be CORS, ignoring):", err));
       
-      // 2. Construct Hotmart URL
-      const baseUrl = "https://pay.hotmart.com/U103642030H";
-      const redirectParams = new URLSearchParams();
+      // 2. Construct Hotmart URL using the prop passed to component
+      // Extract base URL and query params separately if needed, but Hotmart usually handles appending well.
+      // However, the prop `productUrl` might already have query params (like checkoutMode).
       
-      // Add default Hotmart param
-      redirectParams.append('checkoutMode', '10');
+      const urlObj = new URL(productUrl);
       
       // Append captured UTMs and tracking fields
-      if (formData.utm_source) redirectParams.append('utm_source', formData.utm_source);
-      if (formData.utm_medium) redirectParams.append('utm_medium', formData.utm_medium);
-      if (formData.utm_campaign) redirectParams.append('utm_campaign', formData.utm_campaign);
-      if (formData.utm_term) redirectParams.append('utm_term', formData.utm_term);
-      if (formData.utm_content) redirectParams.append('utm_content', formData.utm_content);
-      if (formData.sck) redirectParams.append('sck', formData.sck);
-      if (formData.src) redirectParams.append('src', formData.src);
+      if (formData.utm_source) urlObj.searchParams.append('utm_source', formData.utm_source);
+      if (formData.utm_medium) urlObj.searchParams.append('utm_medium', formData.utm_medium);
+      if (formData.utm_campaign) urlObj.searchParams.append('utm_campaign', formData.utm_campaign);
+      if (formData.utm_term) urlObj.searchParams.append('utm_term', formData.utm_term);
+      if (formData.utm_content) urlObj.searchParams.append('utm_content', formData.utm_content);
+      if (formData.sck) urlObj.searchParams.append('sck', formData.sck);
+      if (formData.src) urlObj.searchParams.append('src', formData.src);
       
-      // Pass user info to pre-fill Hotmart checkout if supported by Hotmart params
-      redirectParams.append('name', formData.name);
-      redirectParams.append('email', formData.email);
+      // Pass user info to pre-fill Hotmart checkout
+      urlObj.searchParams.append('name', formData.name);
+      urlObj.searchParams.append('email', formData.email);
       
-      // Handle Phone for Hotmart (expects 'phoneac' as DDD + Number, without country code for Brazil)
-      let cleanPhone = formData.phone.replace(/\D/g, ''); // Remove formatação (ex: 5511999999999)
-      
-      // Se começar com 55 (Brasil) e tiver tamanho suficiente, remove o 55 para enviar só DDD+Número
+      // Handle Phone for Hotmart
+      let cleanPhone = formData.phone.replace(/\D/g, ''); 
       if (cleanPhone.startsWith('55') && cleanPhone.length > 10) {
         cleanPhone = cleanPhone.substring(2); 
       }
-      
-      redirectParams.append('phoneac', cleanPhone);
-      
-      const finalUrl = `${baseUrl}?${redirectParams.toString()}`;
+      urlObj.searchParams.append('phoneac', cleanPhone);
       
       // 3. Redirect
-      window.location.href = finalUrl;
+      window.location.href = urlObj.toString();
 
     } catch (error) {
       console.error("Error submitting form", error);
@@ -207,15 +206,6 @@ export const CheckoutForm: React.FC = () => {
           onChange={handleChange}
         />
       </div>
-
-      {/* Hidden Fields requested */}
-      <input type="hidden" id="utm_source" name="utm_source" value={formData.utm_source} />
-      <input type="hidden" id="utm_medium" name="utm_medium" value={formData.utm_medium} />
-      <input type="hidden" id="utm_campaign" name="utm_campaign" value={formData.utm_campaign} />
-      <input type="hidden" id="utm_term" name="utm_term" value={formData.utm_term} />
-      <input type="hidden" id="utm_content" name="utm_content" value={formData.utm_content} />
-      <input type="hidden" id="sck" name="sck" value={formData.sck} />
-      <input type="hidden" id="src" name="src" value={formData.src} />
 
       <div className="pt-2">
         <Button fullWidth type="submit" disabled={loading} className="flex justify-center items-center gap-2">
