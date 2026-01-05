@@ -19,7 +19,9 @@ import {
   LineChart,
   Search,
   Database,
-  Lightbulb
+  Lightbulb,
+  AlertTriangle,
+  Code2
 } from 'lucide-react';
 import { Section } from './components/ui/Section';
 import { Button } from './components/ui/Button';
@@ -30,14 +32,19 @@ import { CheckoutForm } from './components/forms/CheckoutForm';
 
 export default function App() {
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
+  const [checkoutUrl, setCheckoutUrl] = useState("https://pay.hotmart.com/H103640886H?checkoutMode=10"); // Default to Full
   
   const scrollToPrice = () => {
     document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const openCheckout = () => {
+  const openCheckout = (url: string) => {
+    setCheckoutUrl(url);
     setIsCheckoutModalOpen(true);
   };
+
+  const FULL_SETUP_LINK = "https://pay.hotmart.com/H103640886H?checkoutMode=10";
+  const TEMPLATE_ONLY_LINK = "https://pay.hotmart.com/S103657013P?checkoutMode=10";
 
   return (
     <div className="min-h-screen font-sans selection:bg-brand-500/30 selection:text-brand-100">
@@ -48,7 +55,7 @@ export default function App() {
         onClose={() => setIsCheckoutModalOpen(false)}
         title="Finalizar Inscrição"
       >
-        <CheckoutForm />
+        <CheckoutForm productUrl={checkoutUrl} />
       </Modal>
 
       {/* Navigation / Header */}
@@ -292,13 +299,13 @@ export default function App() {
       {/* Pricing Section (Light/Default) - Contrast against Comparison */}
       <Section id="pricing" className="py-24 relative overflow-hidden">
          {/* Background glow for pricing - Green */}
-         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-600/10 blur-[120px] rounded-full pointer-events-none"></div>
+         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-600/5 blur-[120px] rounded-full pointer-events-none"></div>
 
          <div className="max-w-7xl mx-auto relative z-10">
            
            <div className="text-center mb-16">
              <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">Invista na Inteligência do seu Negócio</h2>
-             <p className="text-slate-400">Custo único. Benefício recorrente. Infraestrutura própria.</p>
+             <p className="text-slate-400">Escolha o nível de implementação ideal para o seu momento.</p>
            </div>
 
            {/* Price Anchoring Cards */}
@@ -344,78 +351,105 @@ export default function App() {
 
            </div>
            
-           <div className="max-w-lg mx-auto">
+           {/* Pricing Offers Grid */}
+           <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8 items-stretch">
              
-             {/* Anchor Pricing Label */}
-             <div className="text-center py-8 my-4 space-y-2">
-                <p className="text-slate-400 text-sm">
-                  Valor de mercado (Setup Infra + Automação + Consultoria): <span className="line-through text-slate-500 font-medium">R$ 5.000,00</span>
-                </p>
+             {/* OFFER 1: Template Only (Disadvantageous) */}
+             <div className="relative flex flex-col h-full bg-slate-900 border border-slate-700 rounded-2xl p-8 hover:border-slate-500 transition-colors duration-300">
+                <div className="text-xs font-mono text-slate-500 mb-4">&lt;&gt; APENAS O TEMPLATE</div>
+                <h3 className="text-2xl font-bold text-white mb-2">Faça Você Mesmo</h3>
+                <p className="text-slate-400 text-sm mb-6">Ideal apenas para programadores experientes que já possuem infraestrutura.</p>
+                
+                <div className="mb-6">
+                   <div className="text-3xl font-bold text-white">R$ 97,00 <span className="text-sm font-normal text-slate-500">à vista</span></div>
+                   <div className="text-slate-500 text-sm">ou 12x de R$ 10,03</div>
+                </div>
+
+                <div className="bg-brand-900/10 border border-brand-500/30 rounded-lg p-3 mb-6 flex gap-3 items-start">
+                  <AlertTriangle className="text-brand-500 shrink-0 mt-0.5" size={16} />
+                  <p className="text-xs text-brand-200">
+                    <strong className="text-brand-400 block mb-1">Atenção:</strong>
+                    Requer conhecimento técnico avançado em Docker, Linux, Redes e APIs.
+                  </p>
+                </div>
+
+                <div className="space-y-3 mb-8 flex-1">
+                   <div className="flex items-start gap-3 text-slate-500 text-sm">
+                     <Server size={14} className="mt-1 shrink-0" />
+                     <span>Setup Manual de VPS & Portainer</span>
+                   </div>
+                   <div className="flex items-start gap-3 text-slate-500 text-sm">
+                     <Settings size={14} className="mt-1 shrink-0" />
+                     <span>Instalação manual do n8n (Self-hosted)</span>
+                   </div>
+                   <div className="flex items-start gap-3 text-slate-500 text-sm">
+                     <Terminal size={14} className="mt-1 shrink-0" />
+                     <span>Clonar Repo, Criar Imagem Docker & Deploy</span>
+                   </div>
+                   <div className="flex items-start gap-3 text-slate-500 text-sm">
+                     <Code2 size={14} className="mt-1 shrink-0" />
+                     <span>Ajustar Webhooks e Código para Multi-tenancy</span>
+                   </div>
+                </div>
+
+                <Button variant="outline" fullWidth onClick={() => openCheckout(TEMPLATE_ONLY_LINK)} className="mt-auto border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white hover:border-white">
+                  COMPRAR SÓ O TEMPLATE
+                </Button>
              </div>
 
-             <div className="relative group">
-               {/* Gradient Border Effect - Brand Green */}
-               <div className="absolute -inset-1 bg-gradient-to-r from-brand-500 via-emerald-400 to-brand-600 rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-               
-               {/* Changed bg-slate-900 to bg-slate-950 for contrast against light section */}
-               <div className="relative bg-slate-950 rounded-2xl p-8 md:p-10 border border-slate-800 shadow-2xl">
-                  
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-brand-600 to-emerald-600 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg shadow-brand-900/50 whitespace-nowrap uppercase tracking-wide flex items-center gap-2">
-                     <Zap size={14} className="fill-current" /> Oferta Especial
-                  </div>
+             {/* OFFER 2: Full Setup (Recommended) */}
+             <div className="relative flex flex-col h-full bg-slate-950 border-2 border-brand-500 rounded-2xl p-8 shadow-[0_0_40px_-10px_rgba(22,163,74,0.3)]">
+                {/* Badge */}
+                <div className="absolute -top-4 right-8 bg-brand-500 text-black font-bold text-xs px-3 py-1 rounded shadow-lg uppercase tracking-wider">
+                  Recomendado
+                </div>
 
-                  <div className="text-center mt-8 mb-8">
-                    <h3 className="text-xl text-slate-300 font-medium mb-4 uppercase tracking-widest text-xs">Setup Completo + Vitalício</h3>
-                    <div className="flex items-center justify-center gap-3 mb-2">
-                      <span className="text-slate-400 font-medium text-xl mt-4">12x de</span>
-                      <span className="text-[4.5rem] leading-none font-extrabold text-white tracking-tighter">
-                        154,82
-                      </span>
-                    </div>
-                    <div className="text-brand-300 font-medium text-base bg-brand-900/20 border border-brand-500/20 inline-block px-4 py-1 rounded-full">
-                      Pagamento Único de R$ 1.497,00
-                    </div>
-                  </div>
+                <div className="text-xs font-mono text-brand-400 mb-4 flex items-center gap-2">
+                   <Zap size={14} /> SOLUÇÃO COMPLETA
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-2">Instalação + Vitalício</h3>
+                <p className="text-slate-400 text-sm mb-6">Eu entro no seu servidor e deixo tudo rodando. Você só usa.</p>
+                
+                <div className="mb-6">
+                   <div className="flex items-baseline gap-2">
+                     <span className="text-slate-400">12x de</span>
+                     <span className="text-5xl font-extrabold text-white tracking-tight">206,54</span>
+                   </div>
+                   <div className="text-slate-500 text-sm mt-1">ou R$ 1.497,00 à vista</div>
+                </div>
 
-                  <div className="space-y-4 mb-10">
-                     <div className="flex items-center gap-4 text-slate-300">
-                       <div className="w-6 h-6 rounded-full bg-green-500/20 text-green-500 flex items-center justify-center shrink-0"><CheckCircle2 size={14} /></div>
-                       <span className="font-medium">Setup VPS + Docker + n8n</span>
+                <div className="space-y-4 mb-8 flex-1">
+                   {[
+                     "Instalação Completa do n8n & Docker",
+                     "Automação de Relatórios IA",
+                     "Integração WhatsApp/Slack/Email",
+                     "Acesso Vitalício ao Código Fonte",
+                     "Zero Mensalidades",
+                     "Bônus: Aula de Operação + Suporte"
+                   ].map((item, i) => (
+                     <div key={i} className="flex items-center gap-3 text-slate-200">
+                       <CheckCircle2 size={18} className="text-brand-500 shrink-0" />
+                       <span className="font-medium text-sm">{item}</span>
                      </div>
-                     <div className="flex items-center gap-4 text-slate-300">
-                       <div className="w-6 h-6 rounded-full bg-green-500/20 text-green-500 flex items-center justify-center shrink-0"><CheckCircle2 size={14} /></div>
-                       <span className="font-medium">Automação de Relatórios IA</span>
-                     </div>
-                     <div className="flex items-center gap-4 text-slate-300">
-                       <div className="w-6 h-6 rounded-full bg-green-500/20 text-green-500 flex items-center justify-center shrink-0"><CheckCircle2 size={14} /></div>
-                       <span className="font-medium">Integração WhatsApp/Slack/Email</span>
-                     </div>
-                     <div className="flex items-center gap-4 text-slate-300">
-                       <div className="w-6 h-6 rounded-full bg-green-500/20 text-green-500 flex items-center justify-center shrink-0"><CheckCircle2 size={14} /></div>
-                       <span className="font-medium text-brand-200">Acesso Vitalício ao Código</span>
-                     </div>
-                     <div className="flex items-center gap-4 text-slate-300">
-                       <div className="w-6 h-6 rounded-full bg-green-500/20 text-green-500 flex items-center justify-center shrink-0"><CheckCircle2 size={14} /></div>
-                       <span className="font-medium text-brand-200">Zero Mensalidades</span>
-                     </div>
-                  </div>
+                   ))}
+                </div>
 
-                  <Button fullWidth onClick={openCheckout} className="text-lg py-5 group-hover:shadow-brand-500/50 bg-gradient-to-r from-brand-600 to-emerald-500">
-                    GARANTIR MINHA IMPLEMENTAÇÃO
-                  </Button>
-                  
-                  <div className="flex items-center justify-center gap-4 mt-6 pt-6 border-t border-slate-800">
-                     <div className="flex items-center gap-2 text-xs text-slate-500">
-                        <ShieldCheck size={16} className="text-green-500" />
-                        Compra Segura
-                     </div>
-                     <div className="flex items-center gap-2 text-xs text-slate-500">
-                        <CheckCircle2 size={16} className="text-green-500" />
-                        Garantia de 7 Dias
-                     </div>
-                  </div>
-               </div>
+                <Button fullWidth onClick={() => openCheckout(FULL_SETUP_LINK)} className="mt-auto py-4 text-base bg-gradient-to-r from-brand-600 to-emerald-500 hover:to-brand-500 shadow-brand-500/25">
+                  GARANTIR MINHA IMPLEMENTAÇÃO
+                </Button>
+                
+                <div className="flex items-center justify-center gap-4 mt-4 pt-4 border-t border-slate-800">
+                   <div className="flex items-center gap-2 text-[10px] text-slate-500">
+                      <ShieldCheck size={12} className="text-brand-500" />
+                      Compra Segura
+                   </div>
+                   <div className="flex items-center gap-2 text-[10px] text-slate-500">
+                      <CheckCircle2 size={12} className="text-brand-500" />
+                      Garantia de 7 Dias
+                   </div>
+                </div>
              </div>
+
            </div>
          </div>
       </Section>
